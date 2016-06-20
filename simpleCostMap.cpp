@@ -2,6 +2,7 @@
 #include "opencv2/highgui.hpp"
 #include <iostream>
 #include <vector>
+#include <string>
 using namespace std;
 
 int px=0,py=0;
@@ -89,14 +90,20 @@ int main(){
   cv::imshow("map",im);
   cv::waitKey(0);
   cv::setMouseCallback("map",CallBackFunc,NULL);
+  int saved = 0;
   while(1){
-    if(cv::waitKey(30)==27)break;
+    int kb = cv::waitKey(15);
+    if(kb==27)break;
     if(px ==0 && py==0)continue;
     cv::Mat im2 = im.clone();
     //cout<<px<<" "<<py<<endl;
     addTarget(im2,cv::Point(px,py),obstacleCenter);
     cv::circle(im2,cv::Point(px,py),2,255,-1);
     cv::imshow("map",im2);
+    if (kb==115){
+      saved++;
+      cv::imwrite("costMap"+to_string(saved)+".jpg",im2);
+    }
   }
   return 0;
 }
